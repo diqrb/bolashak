@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FeedbackRequest;
 use App\Models\Address;
 use App\Models\Benefit;
 use App\Models\CompanyStatistic;
@@ -9,6 +10,7 @@ use App\Models\Contact;
 use App\Models\ContentTranslation;
 use App\Models\Coordinate;
 use App\Models\Faq;
+use App\Models\Feedback;
 use App\Models\LogosAndImage;
 use App\Models\MainBlock;
 use App\Models\Partner;
@@ -120,5 +122,21 @@ class MainController extends Controller
                                     'socialNetworks'   => $socialNetworks,
                                     'coordinate'       => $coordinate,
                                 ]);
+    }
+
+    public function feedback(FeedbackRequest $request): JsonResponse
+    {
+        try {
+        $data = $request->validated();
+        Feedback::query()->create($data);
+        return response()->json([
+                'message' => 'Операция прошла успешно'
+                                ]);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                                        'message' => 'Произошла ошибка'
+                                    ], 418);
+        }
     }
 }
