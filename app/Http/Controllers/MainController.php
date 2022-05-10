@@ -31,7 +31,9 @@ class MainController extends Controller
         if (!$language) {
             $language = 'ru';
         }
-
+        if ($language == 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7') {
+            $language = 'ru';
+        }
 
         $imagePath = env('APP_URL') . '/storage/';
 
