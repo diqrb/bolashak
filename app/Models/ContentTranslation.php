@@ -27,6 +27,22 @@ class ContentTranslation extends Model
         'all_rights_reserved',
         'social_networks',
         'contacts',
-        'the_address'
+        'the_address',
+        'write_whatsapp',
+        'days',
+        'hours',
+        'minutes',
+        'seconds',
+        'stocks_end_text',
+        'before',
+        'after',
+        'callback',
+        'name',
+        'phone',
+        'email',
+        'about_company',
+        'program',
+        'reviews',
+        'partners'
     ];
 }
