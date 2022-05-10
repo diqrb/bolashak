@@ -128,10 +128,10 @@ class MainController extends Controller
 
         $seo = [
             'title' => $seo->title,
-            'meta'  => [
+            'meta'  => [[
                 'hid'         => $seo->hid,
                 'name'        => $seo->name,
-                'content' => $seo->description,
+                'content'     => $seo->description,]
             ],
         ];
 
