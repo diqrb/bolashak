@@ -195,10 +195,10 @@ return [
     ],
 
     'googlemaps' => [
-        'key'    => env('GOOGLE_MAPS_KEY', ''),
+        'key'    => env('GOOGLE_MAPS_KEY', 'AIzaSyCz3Zz_9Xxn7gtDtaE_Ar26tz3hjHOyLHs'),
         'center' => [
-            'lat' => env('GOOGLE_MAPS_DEFAULT_CENTER_LAT', '32.715738'),
-            'lng' => env('GOOGLE_MAPS_DEFAULT_CENTER_LNG', '-117.161084'),
+            'lat' => env('GOOGLE_MAPS_DEFAULT_CENTER_LAT', '43.22201'),
+            'lng' => env('GOOGLE_MAPS_DEFAULT_CENTER_LNG', '76.85125'),
         ],
         'zoom' => env('GOOGLE_MAPS_DEFAULT_ZOOM', 11),
     ],

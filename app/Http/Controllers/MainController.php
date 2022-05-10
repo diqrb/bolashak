@@ -84,19 +84,21 @@ class MainController extends Controller
 
         $coordinate = Coordinate::query()
                                 ->first()
+                                ->getCoordinates()
         ;
 
-        $images = LogosAndImage::query()
-                               ->first()
+        $coordinate = [
+            'latitude'  => $coordinate[0]['lat'],
+            'longitude' => $coordinate[0]['lat'],
+        ];
+        $images     = LogosAndImage::query()
+                                   ->first()
         ;
 
         foreach ($benefits as $benefit) {
             $benefit->image = json_decode($benefit->image, true)[0]['download_link'];
         }
 
-        foreach ($socialNetworks as $socialNetwork) {
-            $socialNetwork->image = json_decode($socialNetwork->image, true)[0]['download_link'];
-        }
         $images->main_logo   = json_decode($images->main_logo, true)[0]['download_link'];
         $images->footer_logo = json_decode($images->footer_logo, true)[0]['download_link'];
 
@@ -105,12 +107,21 @@ class MainController extends Controller
                                           ->translate($language)
         ;
 
-        $sliderImages = SliderImage::all()->makeHidden(['created_at', 'updated_at', 'id']);
+        $sliderImages = SliderImage::all()
+                                   ->makeHidden(['created_at', 'updated_at', 'id'])
+        ;
 
-
-
+        $socialNetworks->makeHidden('id');
+        $collection = collect([[
+            'whatsapp' => $socialNetworks[0],
+        ],
+                                  [
+                                      'instagram' => $socialNetworks[0],
+                                  ]]);
 
         return response()->json([
+                                    'coordinate'       => $coordinate,
+                                    'socialNetworks'   => $collection,
                                     'imagePath'        => $imagePath,
                                     'slider_images'    => $sliderImages,
                                     'images'           => $images,
@@ -126,26 +137,24 @@ class MainController extends Controller
                                     'partners'         => $partners,
                                     'contacts'         => $contacts,
                                     'address'          => $addresses,
-                                    'socialNetworks'   => [
-                                        'whatsapp' => $socialNetworks[0],
-                                        'instagram' => $socialNetworks[1],
-                                    ],
-                                    'coordinate'       => $coordinate,
+
                                 ]);
     }
 
     public function feedback(FeedbackRequest $request): JsonResponse
     {
         try {
-        $data = $request->validated();
-        Feedback::query()->create($data);
+            $data = $request->validated();
+            Feedback::query()
+                    ->create($data)
+            ;
 
-        return response()->json([
-                'message' => 'Операция прошла успешно'
-                                ]);
+            return response()->json([
+                                        'message' => 'Операция прошла успешно',
+                                    ]);
         } catch (\Exception $exception) {
             return response()->json([
-                                        'message' => 'Произошла ошибка'
+                                        'message' => 'Произошла ошибка',
                                     ], 418);
         }
     }
