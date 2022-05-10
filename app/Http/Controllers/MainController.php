@@ -15,6 +15,7 @@ use App\Models\LogosAndImage;
 use App\Models\MainBlock;
 use App\Models\Partner;
 use App\Models\Review;
+use App\Models\Seo;
 use App\Models\SliderImage;
 use App\Models\SocialNetwork;
 use App\Models\Stock;
@@ -120,7 +121,22 @@ class MainController extends Controller
                                       'instagram' => $socialNetworks[0],
                                   ]]);
 
+        $seo = Seo::query()
+                  ->first()
+                  ->makeHidden('id', 'created_at', 'updated_at')
+        ;
+
+        $seo = [
+            'title' => $seo->title,
+            'meta'  => [
+                'hid'         => $seo->hid,
+                'name'        => $seo->name,
+                'description' => $seo->description,
+            ],
+        ];
+
         return response()->json([
+                                    'seo'              => $seo,
                                     'coordinate'       => $coordinate,
                                     'socialNetworks'   => $collection,
                                     'imagePath'        => $imagePath,
