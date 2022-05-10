@@ -15,6 +15,7 @@ use App\Models\LogosAndImage;
 use App\Models\MainBlock;
 use App\Models\Partner;
 use App\Models\Review;
+use App\Models\SliderImage;
 use App\Models\SocialNetwork;
 use App\Models\Stock;
 use App\Models\StudyingProgram;
@@ -104,8 +105,14 @@ class MainController extends Controller
                                           ->translate($language)
         ;
 
+        $sliderImages = SliderImage::all()->makeHidden(['created_at', 'updated_at', 'id']);
+
+
+
+
         return response()->json([
                                     'imagePath'        => $imagePath,
+                                    'slider_images'    => $sliderImages,
                                     'images'           => $images,
                                     'translations'     => $translations,
                                     'mainBlock'        => $mainBlock,
@@ -119,7 +126,10 @@ class MainController extends Controller
                                     'partners'         => $partners,
                                     'contacts'         => $contacts,
                                     'address'          => $addresses,
-                                    'socialNetworks'   => $socialNetworks,
+                                    'socialNetworks'   => [
+                                        'whatsapp' => $socialNetworks[0],
+                                        'instagram' => $socialNetworks[1],
+                                    ],
                                     'coordinate'       => $coordinate,
                                 ]);
     }
