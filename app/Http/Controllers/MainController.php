@@ -131,7 +131,7 @@ class MainController extends Controller
             'meta'  => [
                 'hid'         => $seo->hid,
                 'name'        => $seo->name,
-                'description' => $seo->description,
+                'content' => $seo->description,
             ],
         ];
 
