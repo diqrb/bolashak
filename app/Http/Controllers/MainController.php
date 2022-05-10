@@ -88,10 +88,9 @@ class MainController extends Controller
                                 ->first()
                                 ->getCoordinates()
         ;
-
         $coordinate = [
             'latitude'  => $coordinate[0]['lat'],
-            'longitude' => $coordinate[0]['lat'],
+            'longitude' => $coordinate[0]['lng'],
         ];
         $images     = LogosAndImage::query()
                                    ->first()
