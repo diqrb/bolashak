@@ -129,10 +129,10 @@ class MainController extends Controller
         try {
         $data = $request->validated();
         Feedback::query()->create($data);
+
         return response()->json([
                 'message' => 'Операция прошла успешно'
                                 ]);
-
         } catch (\Exception $exception) {
             return response()->json([
                                         'message' => 'Произошла ошибка'
