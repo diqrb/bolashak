@@ -12,7 +12,8 @@ class MainBlock extends Model
 
     protected $translatable = [
         'title',
-        'subtitle'
+        'subtitle',
+        'image'
     ];
 
     protected $hidden = [
