@@ -7,7 +7,7 @@
                   class="form-edit-add"
                   method="POST"
                   enctype="multipart/form-data"
-                  action="{{'http://127.0.0.1:8000/admin/regular-questions/' . $category->id}}">
+                  action="{{  env('APP_URL')  . '/admin/regular-questions/' . $category->id}}">
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="category_id" value="{{$category->id}}">
                 @else
@@ -15,7 +15,7 @@
                           class="form-edit-add"
                           method="POST"
                           enctype="multipart/form-data"
-                          action="http://127.0.0.1:8000/admin/regular-questions">
+                          action="{{env('APP_URL') . '/admin/regular-questions'}}">
                         @endif
                         @csrf
 
