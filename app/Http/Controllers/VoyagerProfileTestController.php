@@ -157,10 +157,13 @@ class VoyagerProfileTestController extends VoyagerBaseController
             $view = "voyager::$slug.edit-add";
         }
 
+        $mainSubject = MainSubject::query()->where('id', $id)->first()->toArray();
+
         $category  = RegularCategoryTest::query()
-                                        ->where('id', $id)
+                                        ->where('id', $mainSubject['test_id'])
                                         ->first()
         ;
+
         $questions = RegularQuestion::query()
                                     ->where('test_id', $category->id)
                                     ->get()
@@ -173,13 +176,14 @@ class VoyagerProfileTestController extends VoyagerBaseController
         }
 
         return Voyager::view(
-            $view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'category', 'questions')
+            $view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'category', 'questions', 'mainSubject')
         );
     }
 
     public function update(Request $request, $id)
     {
         $data = $request->all();
+
         RegularCategoryTest::query()
                            ->where('id', $id)
                            ->update([
@@ -188,7 +192,7 @@ class VoyagerProfileTestController extends VoyagerBaseController
                                     ])
         ;
         MainSubject::query()
-                   ->where('id', $id)
+                   ->where('id', $data['main'])
                    ->update([
                                 'title'    => $data['title'],
                                 'language' => $data['language'],
@@ -269,6 +273,7 @@ class VoyagerProfileTestController extends VoyagerBaseController
                                         'title'    => $requestData['title'],
                                         'language' => $requestData['language'],
                                         'type'     => 'profile_items',
+                                        'test_id'  => $category->id,
                                     ])
         ;
         $data = $requestData['array'];

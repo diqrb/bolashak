@@ -10,6 +10,7 @@
                   action="{{  env('APP_URL')  . '/admin/main-subjects/' . $category->id}}">
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="category_id" value="{{$category->id}}">
+                <input type="hidden" name="main" value="{{$mainSubject['id']}}">
                 @else
                     <form role="form"
                           class="form-edit-add"

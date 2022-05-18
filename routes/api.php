@@ -19,9 +19,10 @@ Route::get('index', [MainController::class, 'index']);
 Route::post('feedback', [MainController::class, 'feedback']);
 
 Route::get('test/categories', [TestController::class, 'categories']);
-Route::get('test/{id}', [TestController::class, 'tests']);
+Route::get('test', [TestController::class, 'tests']);
 Route::post('test', [TestController::class, 'results']);
 
+Route::post('user', [TestController::class, 'user']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
