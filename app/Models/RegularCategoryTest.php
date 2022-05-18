@@ -11,6 +11,7 @@ class RegularCategoryTest extends Model
 
     protected $fillable = [
         'title',
-        'language'
+        'language',
+        'type'
     ];
 }

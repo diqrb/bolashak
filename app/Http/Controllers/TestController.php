@@ -23,13 +23,20 @@ class TestController extends Controller
 
         $regularCategoryTests = RegularCategoryTest::query()
                                                    ->where('language', $language)
+                                                   ->where('type', 'main_items')
                                                    ->select('id', 'title')
                                                    ->get()
         ;
 
+        $profile_items = RegularCategoryTest::query()
+                                            ->where('language', $language)
+                                            ->where('type', 'profile_items')
+                                            ->select('id', 'title')
+                                            ->get();
+
         return response()->json([
                                     'main_items'    => $regularCategoryTests,
-                                    'profile_items' => [],
+                                    'profile_items' => $profile_items,
                                 ]);
     }
 
@@ -37,11 +44,10 @@ class TestController extends Controller
     {
         $questions = RegularQuestion::query()
                                     ->where('test_id', $id)
-                                    ->select('id', 'question')
+                                    ->select('id', 'question', 'type')
                                     ->get()
         ;
         foreach ($questions as $question) {
-            $question->type    = 'common';
             $question->answers = Answer::query()
                                        ->where('question_id', $question->id)
                                        ->select('id', 'answer')
@@ -54,41 +60,63 @@ class TestController extends Controller
 
     public function results(Request $request)
     {
-        $data    = json_decode($request->getContent(), true);
-        $answers = $data['answers'];
-        $result  = [];
+        $data        = json_decode($request->getContent(), true);
+        $answers     = $data['answers'];
+        $result      = [];
         $total_right = 0;
         foreach ($answers as $answer) {
             $question    = RegularQuestion::query()
-                                          ->select('id', 'question')
+                                          ->select('id', 'question', 'type')
                                           ->find($answer['question'])
             ;
-            $your_answer = Answer::query()
-                                 ->where('id', $answer['answer'])
-                                 ->select('id', 'answer')
-                                 ->first()
-            ;
 
-            $correct_answer = Answer::query()
-                                    ->where('question_id', $answer['question'])
-                                    ->where('is_correct', 1)
-                                    ->select('id', 'answer')
-                                    ->first()
-            ;
-            if ($your_answer->id == $correct_answer->id) {
-                $total_right++;
+            if ($question->type == "common") {
+                $your_answer = Answer::query()
+                                     ->where('id', $answer['answer'])
+                                     ->select('id', 'answer')
+                                     ->first()
+                ;
+
+                $correct_answer = Answer::query()
+                                        ->where('question_id', $answer['question'])
+                                        ->where('is_correct', 1)
+                                        ->select('id', 'answer')
+                                        ->first()
+                ;
+                if ($your_answer->id == $correct_answer->id) {
+                    $total_right++;
+                }
+                $result[] = [
+                    'question'       => $question,
+                    'correct_answer' => $correct_answer,
+                    'your_answer'    => $your_answer,
+                    'right'          => $your_answer->id == $correct_answer->id,
+                ];
+            } else {
+                $your_answers = Answer::query()
+                                      ->whereIn('id', $answer['answer'])
+                                      ->select('id', 'answer')
+                                      ->get();
+                $correct_answer = Answer::query()
+                                        ->where('question_id', $answer['question'])
+                                        ->where('is_correct', 1)
+                                        ->select('id', 'answer')
+                                        ->get();
+                $sum = 0;
+                foreach ($correct_answer as $item) {
+                    foreach ($your_answers as $your_answer) {
+                        if ($your_answer->id == $item->id) {
+                            $sum++;
+                        }//TODO что как считать
+                    }
+                }
+
             }
-            $result[]       = [
-                'question'       => $question,
-                'correct_answer' => $correct_answer,
-                'your_answer'    => $your_answer,
-                'right'          => $your_answer->id == $correct_answer->id,
-            ];
         }
 
         return response()->json([
-            'total_right' => $total_right,
-            'result' => $result
+                                    'total_right' => $total_right,
+                                    'result'      => $result,
                                 ]);
     }
 }

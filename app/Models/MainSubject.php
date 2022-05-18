@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RegularQuestion extends Model
+class MainSubject extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'test_id',
-        'question',
+        'title',
+        'language',
         'type'
     ];
 }
