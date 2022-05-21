@@ -108,15 +108,17 @@ class TestController extends Controller
                                             ->select('id', 'answer')
                                             ->first()
                     ;
-                    if ($your_answer->id == $correct_answer->id) {
-                        $total_right++;
+                    if ($your_answer != null) {
+                        if ($your_answer->id == $correct_answer->id) {
+                            $total_right++;
+                        }
+                        $examination[] = [
+                            'question'       => $question,
+                            'correct_answer' => $correct_answer,
+                            'your_answer'    => $your_answer,
+                            'right'          => $your_answer->id == $correct_answer->id,
+                        ];
                     }
-                    $examination[] = [
-                        'question'       => $question,
-                        'correct_answer' => $correct_answer,
-                        'your_answer'    => $your_answer,
-                        'right'          => $your_answer->id == $correct_answer->id,
-                    ];
                 } else {
                     $your_answers = Answer::query()
                                           ->whereIn('id', $answer['answer'])
