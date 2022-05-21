@@ -27,33 +27,22 @@ class TestController extends Controller
 
     public function categories()
     {
-        $language = request()->header('Accept-Language');
+        $language = request()->input('language');
 
         if (!$language) {
-            $language = 'ru';
-        }
-        if ($language == 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7') {
             $language = 'ru';
         }
 
         $regularCategoryTests = RegularCategoryTest::query()
                                                    ->where('language', $language)
-                                                   ->where('type', 'main_items')
                                                    ->select('id', 'title')
                                                    ->get()
         ;
 
-        $profile_items = RegularCategoryTest::query()
-                                            ->where('language', $language)
-                                            ->where('type', 'profile_items')
-                                            ->select('id', 'title')
-                                            ->get()
-        ;
 
-        return response()->json([
-                                    'main_items'    => $regularCategoryTests,
-                                    'profile_items' => $profile_items,
-                                ]);
+        return response()->json(
+            $regularCategoryTests,
+        );
     }
 
     public function tests(Request $request): JsonResponse
